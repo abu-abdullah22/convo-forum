@@ -1,15 +1,17 @@
 const postContainer = document.getElementById("post-container");
 
+const latestPostContainer = document.getElementById('latest-post-container') ; 
+
 const loadAllPosts = async () => {
   const response = await fetch(
     "https://openapi.programming-hero.com/api/retro-forum/posts"
   );
   const data = await response.json();
-  console.log(data.posts);
+//   console.log(data.posts);
 
   
   data.posts.forEach((item) => {
-    console.log(item);
+    // console.log(item);
     
     const div = document.createElement("div");
     div.innerHTML = `
@@ -51,4 +53,42 @@ const loadAllPosts = async () => {
   });
 };
 
+
+const latestPosts = async () => {
+    const response = await fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts') ;
+    const data = await response.json() ;
+    
+    data.forEach((item) => {
+        // console.log(item);
+        const div = document.createElement('div') ;
+        div.innerHTML = `
+        <div class="border-2 border-gray-400 rounded-3xl p-5 space-y-5">
+        <img src="${item.cover_image}" alt="">
+        <div class="flex gap-4">
+            <img src="./images/post-frame.png" alt="">
+            <p>${item.author.posted_date}</p>
+        </div>
+        <h4 class="font-extrabold">${item.title}</h4>
+        <p class="text-[#12132D99]">${item.description}</p>
+        <div class="flex gap-8">
+            <img class="w-[44px] h-[44px] rounded-full" src="${item.profile_image}" alt="">
+            <div>
+                <p class="font-bold">${item.author.name}</p>
+                <p id= "desig" class="text-[#12132D]">${item.author.designation}</p>
+            </div>
+        </div>
+    </div>
+        ` ;
+       
+    latestPostContainer.appendChild(div) ;
+
+        // if(!item.author.designation) {
+        //     document.getElementById('desig').innerText = "unknown" ;
+        // } ; 
+        
+    })
+}
+
 loadAllPosts();
+
+latestPosts() ;
