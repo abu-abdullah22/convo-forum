@@ -59,6 +59,8 @@ const latestPosts = async () => {
     const data = await response.json() ;
     
     data.forEach((item) => {
+ 
+
         // console.log(item);
         const div = document.createElement('div') ;
         div.innerHTML = `
@@ -79,12 +81,8 @@ const latestPosts = async () => {
         </div>
     </div>
         ` ;
-       
+    
     latestPostContainer.appendChild(div) ;
-
-        // if(!item.author.designation) {
-        //     document.getElementById('desig').innerText = "unknown" ;
-        // } ; 
         
     })
 }
