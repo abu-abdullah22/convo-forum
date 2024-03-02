@@ -1,19 +1,22 @@
-const postContainer = document.getElementById('post-container') ;
-
-
+const postContainer = document.getElementById("post-container");
 
 const loadAllPosts = async () => {
-    const response = await fetch('https://openapi.programming-hero.com/api/retro-forum/posts') ;
-    const data = await response.json() ;
-    console.log(data.posts);
-    data.posts.forEach((item => {
-        console.log(item);
-        const div = document.createElement('div') ;
-        div.innerHTML = `
+  const response = await fetch(
+    "https://openapi.programming-hero.com/api/retro-forum/posts"
+  );
+  const data = await response.json();
+  console.log(data.posts);
+
+  
+  data.posts.forEach((item) => {
+    console.log(item);
+    
+    const div = document.createElement("div");
+    div.innerHTML = `
         <div class="flex mb-10 gap-10 bg-[#F3F3F5] p-5 rounded-lg">
                         <div class="flex">
                             <img src="${item.image}" class="w-[72px] h-[72px] rounded-2xl" alt="">
-                            <div id="status-bar"></div>
+                            <div id="status-bar">${item.isActive}</div>
                         </div>
                         <div class="space-y-10">
                            <p class="font-medium space-x-10">
@@ -27,9 +30,9 @@ const loadAllPosts = async () => {
 
                             <div class="flex justify-between">
                                 <div class="flex gap-10">
-                                    <span class="flex"><img src="./images/tabler-icon-message-2.png" alt="">560</span>
-                                <span class="flex"><img src="./images/tabler-icon-eye.png" alt="">1,568</span>
-                                <span class="flex"><img src="./images/tabler-icon-clock-hour-9.png" alt="">5min</span>
+                                    <span class="flex gap-2"><img src="./images/tabler-icon-message-2.png" alt=""> ${item.comment_count}</span>
+                                <span class="flex gap-2"><img src="./images/tabler-icon-eye.png" alt="">${item.view_count}</span>
+                                <span class="flex gap-2"><img src="./images/tabler-icon-clock-hour-9.png" alt="">${item.posted_time}min</span>
                                 </div>
 
                                 <div class="">
@@ -39,23 +42,13 @@ const loadAllPosts = async () => {
                             
                         </div>
                     </div>
-        ` ;
+        `;
 
-        postContainer.appendChild(div) ;
+    postContainer.appendChild(div);
 
+    
+  
+  });
+};
 
-        const statusBar = document.getElementById('status-bar') ;
-        if(item.isActive) {
-            statusBar.innerHTML = `<img src="./images/Status.png">`
-        } else{
-            statusBar.innerHTML =`<img src ="./images/status2.png">` 
-        } 
-
-       
-
-
-
-    }))
-}
-
-loadAllPosts() ;
+loadAllPosts();
