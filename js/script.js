@@ -1,28 +1,30 @@
 const postContainer = document.getElementById("post-container");
 
-const latestPostContainer = document.getElementById('latest-post-container') ; 
+const latestPostContainer = document.getElementById("latest-post-container");
 
-const value = document.getElementById('search-box').value ;
-           
+let markCount = parseInt(document.getElementById('mark-count').innerText) ;
 
-
-const loadAllPosts = async () => {
-  const response = await fetch(
-    "https://openapi.programming-hero.com/api/retro-forum/posts"
-  );
+const loadAllPosts = async (catName) => {
+  let api = ``;
+  if (!catName) {
+    api = `https://openapi.programming-hero.com/api/retro-forum/posts`;
+  } else {
+    api = `https://openapi.programming-hero.com/api/retro-forum/posts?category=${catName}`;
+  }
+  const response = await fetch(api);
   const data = await response.json();
-//   console.log(data.posts);
+  console.log(data.posts);
 
-  
+  postContainer.innerHTML = "";
   data.posts.forEach((item) => {
     // console.log(item);
-    let active = '' ; 
-    if(item.isActive){
-        active = `<img src="./images/Status.png">` ;
-    }else{
-        active = `<img src="./images/status2.png">` ;
+    let active = "";
+    if (item.isActive) {
+      active = `<img src="./images/Status.png">`;
+    } else {
+      active = `<img src="./images/status2.png">`;
     }
-    
+
     const div = document.createElement("div");
     div.innerHTML = `
         <div class="flex mb-10 gap-10 bg-[#F3F3F5] p-5 rounded-lg">
@@ -43,12 +45,12 @@ const loadAllPosts = async () => {
                             <div class="flex justify-between">
                                 <div class="flex gap-10">
                                     <span class="flex gap-2"><img src="./images/tabler-icon-message-2.png" alt=""> ${item.comment_count}</span>
-                                <span class="flex gap-2"><img src="./images/tabler-icon-eye.png" alt="">${item.view_count}</span>
+                                <span class="flex gap-2"><span id="eye"><img src="./images/tabler-icon-eye.png" alt=""></span>${item.view_count}</span>
                                 <span class="flex gap-2"><img src="./images/tabler-icon-clock-hour-9.png" alt="">${item.posted_time}min</span>
                                 </div>
 
                                 <div class="">
-                                    <img src="./images/email.png" alt="">
+                                    <img onclick="clicked(this)" class="cursor-pointer" src="./images/email.png" alt="">
                                 </div>
                             </div>
                             
@@ -57,43 +59,61 @@ const loadAllPosts = async () => {
         `;
 
     postContainer.appendChild(div);
-  
 
-    
-
-    
-  
   });
 };
 
 
+
+const clicked = (current) => {
+    markCount+= 1 ;
+    document.getElementById('mark-count').innerText = markCount ;
+
+  const listContainer1 = document.getElementById("list-container1");
+  let p1 = document.createElement('p') ;
+  p1.innerText = current.parentNode.parentNode.parentNode.childNodes[3].innerText ;
+  listContainer1.appendChild(p1) ;
+
+  const listContainer2 = document.getElementById("list-container2");
+  let p2 = document.createElement('p') ;
+  p2.innerHTML =`<img class="inline" src="./images/tabler-icon-eye.png" alt=""> ${current.parentNode.parentNode.childNodes[1].childNodes[3].innerText}` ;
+  listContainer2.appendChild(p2) ; 
+
+};
+
+
+
+
+
 const latestPosts = async () => {
-    const response = await fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts') ;
-    const data = await response.json() ;
-    
-    data.forEach((item) => {
-    let desig = '' ;
-    if(item.author.designation) {
-        desig =  `${item.author.designation}` ;
+  const response = await fetch(
+    "https://openapi.programming-hero.com/api/retro-forum/latest-posts"
+  );
+  const data = await response.json();
+
+  data.forEach((item) => {
+    let desig = "";
+    if (item.author.designation) {
+      desig = `${item.author.designation}`;
     } else {
-        desig = `unknown` ; 
+      desig = `Unknown`;
     }
 
-    let postedDate = '' ;
-    if(item.author.posted_date){
-        postedDate = `${item.author.posted_date}`;
+    let postedDate = "";
+    if (item.author.posted_date) {
+      postedDate = `${item.author.posted_date}`;
     } else {
-        postedDate = `unknown` ;
+      postedDate = `No publish Date`;
     }
 
-        // console.log(item);
-        const div = document.createElement('div') ;
-        div.innerHTML = `
-        <div class="border-2 border-gray-400 rounded-3xl p-5 space-y-5">
+    // console.log(item);
+    const div = document.createElement("div");
+    div.innerHTML = `
+        <div class="border-2 border-[#12132D26] rounded-3xl p-5 space-y-5">
         <img src="${item.cover_image}" alt="">
         <div class="flex gap-4">
             <img src="./images/post-frame.png" alt="">
-            <p>${postedDate}</p>
+            <p class="text-[#12132D99]">${postedDate}</p>
         </div>
         <h4 class="font-extrabold">${item.title}</h4>
         <p class="text-[#12132D99]">${item.description}</p>
@@ -101,33 +121,28 @@ const latestPosts = async () => {
             <img class="w-[44px] h-[44px] rounded-full" src="${item.profile_image}" alt="">
             <div>
                 <p class="font-bold">${item.author.name}</p>
-                <p id= "desig" class="text-[#12132D]">${desig}</p>
+                <p id= "desig" class="text-[#12132D99]">${desig}</p>
             </div>
         </div>
     </div>
-        ` ;
-    
-    latestPostContainer.appendChild(div) ;
-        
-    })
-}
+        `;
 
-
-const searchCategory = () => {
-    
-
-    if(value) {
-        loadAllPosts(value) ;
-    } else {
-        alert('Please enter a valid category name')
-    }
-}
+    latestPostContainer.appendChild(div);
+  });
+};
 
 
 
-loadAllPosts();
-
-latestPosts() ;
 
 
 
+const submitForm = document.getElementById("form");
+submitForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const inputValue = document.getElementById("search-box").value;
+  loadAllPosts(inputValue);
+});
+
+loadAllPosts("");
+
+latestPosts();
