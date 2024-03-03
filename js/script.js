@@ -2,6 +2,10 @@ const postContainer = document.getElementById("post-container");
 
 const latestPostContainer = document.getElementById('latest-post-container') ; 
 
+const value = document.getElementById('search-box').value ;
+           
+
+
 const loadAllPosts = async () => {
   const response = await fetch(
     "https://openapi.programming-hero.com/api/retro-forum/posts"
@@ -12,13 +16,19 @@ const loadAllPosts = async () => {
   
   data.posts.forEach((item) => {
     // console.log(item);
+    let active = '' ; 
+    if(item.isActive){
+        active = `<img src="./images/Status.png">` ;
+    }else{
+        active = `<img src="./images/status2.png">` ;
+    }
     
     const div = document.createElement("div");
     div.innerHTML = `
         <div class="flex mb-10 gap-10 bg-[#F3F3F5] p-5 rounded-lg">
                         <div class="flex">
                             <img src="${item.image}" class="w-[72px] h-[72px] rounded-2xl" alt="">
-                            <div id="status-bar">${item.isActive}</div>
+                           <div> ${active} </div>
                         </div>
                         <div class="space-y-10">
                            <p class="font-medium space-x-10">
@@ -47,6 +57,9 @@ const loadAllPosts = async () => {
         `;
 
     postContainer.appendChild(div);
+  
+
+    
 
     
   
@@ -59,7 +72,19 @@ const latestPosts = async () => {
     const data = await response.json() ;
     
     data.forEach((item) => {
- 
+    let desig = '' ;
+    if(item.author.designation) {
+        desig =  `${item.author.designation}` ;
+    } else {
+        desig = `unknown` ; 
+    }
+
+    let postedDate = '' ;
+    if(item.author.posted_date){
+        postedDate = `${item.author.posted_date}`;
+    } else {
+        postedDate = `unknown` ;
+    }
 
         // console.log(item);
         const div = document.createElement('div') ;
@@ -68,7 +93,7 @@ const latestPosts = async () => {
         <img src="${item.cover_image}" alt="">
         <div class="flex gap-4">
             <img src="./images/post-frame.png" alt="">
-            <p>${item.author.posted_date}</p>
+            <p>${postedDate}</p>
         </div>
         <h4 class="font-extrabold">${item.title}</h4>
         <p class="text-[#12132D99]">${item.description}</p>
@@ -76,7 +101,7 @@ const latestPosts = async () => {
             <img class="w-[44px] h-[44px] rounded-full" src="${item.profile_image}" alt="">
             <div>
                 <p class="font-bold">${item.author.name}</p>
-                <p id= "desig" class="text-[#12132D]">${item.author.designation}</p>
+                <p id= "desig" class="text-[#12132D]">${desig}</p>
             </div>
         </div>
     </div>
@@ -87,6 +112,22 @@ const latestPosts = async () => {
     })
 }
 
+
+const searchCategory = () => {
+    
+
+    if(value) {
+        loadAllPosts(value) ;
+    } else {
+        alert('Please enter a valid category name')
+    }
+}
+
+
+
 loadAllPosts();
 
 latestPosts() ;
+
+
+
