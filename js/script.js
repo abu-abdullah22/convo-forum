@@ -5,6 +5,8 @@ const latestPostContainer = document.getElementById("latest-post-container");
 let markCount = parseInt(document.getElementById('mark-count').innerText) ;
 
 const loadAllPosts = async (catName) => {
+ setTimeout(async() => {
+  
   let api = ``;
   if (!catName) {
     api = `https://openapi.programming-hero.com/api/retro-forum/posts`;
@@ -17,6 +19,8 @@ const loadAllPosts = async (catName) => {
 
   postContainer.innerHTML = "";
   data.posts.forEach((item) => {
+    document.getElementById('spinner').style.display = 'none' ;
+    document.getElementById('search-box').value = '' ;
     // console.log(item);
     let active = "";
     if (item.isActive) {
@@ -43,7 +47,7 @@ const loadAllPosts = async (catName) => {
                             <p class="text-[#12132D99] border-b-2 border-dashed pb-1">${item.description}</p>
 
                             <div class="flex justify-between">
-                                <div class="flex gap-10">
+                                <div class="lg:flex gap-10">
                                     <span class="flex gap-2"><img src="./images/tabler-icon-message-2.png" alt=""> ${item.comment_count}</span>
                                 <span class="flex gap-2"><span id="eye"><img src="./images/tabler-icon-eye.png" alt=""></span>${item.view_count}</span>
                                 <span class="flex gap-2"><img src="./images/tabler-icon-clock-hour-9.png" alt="">${item.posted_time}min</span>
@@ -61,7 +65,11 @@ const loadAllPosts = async (catName) => {
     postContainer.appendChild(div);
 
   });
+ }, 2000);
 };
+
+
+
 
 
 
@@ -78,7 +86,7 @@ const clicked = (current) => {
   let p2 = document.createElement('p') ;
   p2.innerHTML =`<img class="inline" src="./images/tabler-icon-eye.png" alt=""> ${current.parentNode.parentNode.childNodes[1].childNodes[3].innerText}` ;
   listContainer2.appendChild(p2) ; 
-
+ 
 };
 
 
@@ -133,15 +141,16 @@ const latestPosts = async () => {
 
 
 
-
-
-
 const submitForm = document.getElementById("form");
 submitForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const inputValue = document.getElementById("search-box").value;
-  loadAllPosts(inputValue);
-});
+    e.preventDefault();
+    const inputValue = document.getElementById("search-box").value;
+    loadAllPosts(inputValue);
+    document.getElementById('spinner').style.display = 'block' ;
+  });
+
+
+
 
 loadAllPosts("");
 
