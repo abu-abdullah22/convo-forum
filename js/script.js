@@ -33,7 +33,7 @@ const loadAllPosts = async (catName) => {
     div.innerHTML = `
         <div class="flex mb-10 gap-10 bg-[#F3F3F5] p-5 rounded-lg">
                         <div class="grid grid-cols-2">
-                            <img src="${item.image}" class=" w-[50px] lg:w-[72px] h-[50px] lg:h-[72px] rounded-2xl" alt="">
+                            <img src="${item.image}" class="w-[72px] h-[50px] lg:h-[72px] rounded-2xl" alt="">
                            <div> ${active} </div>
                         </div>
                         <div class="space-y-10">
