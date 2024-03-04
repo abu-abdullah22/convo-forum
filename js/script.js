@@ -36,7 +36,7 @@ const loadAllPosts = async (catName) => {
                             <img src="${item.image}" class="w-[72px] h-[50px] lg:h-[72px] rounded-2xl" alt="">
                            <div> ${active} </div>
                         </div>
-                        <div class="space-y-10">
+                        <div class="space-y-10 w-full">
                            <p class="font-medium space-x-10">
                             <span>#${item.category}</span>
                             <span>Author : ${item.author.name}</span>
@@ -44,7 +44,7 @@ const loadAllPosts = async (catName) => {
 
                             <h4 class="text-xl font-bold">${item.title}</h4>
 
-                            <p class="text-[#12132D99] border-b-2 border-dashed pb-1">${item.description}</p>
+                            <p class="text-[#12132D99] border-b-2 border-dashed pb-5">${item.description}</p>
 
                             <div class="flex justify-between">
                                 <div class="lg:flex gap-10">
